@@ -41,12 +41,14 @@ def request(environ, action, data=None, token=None, params=None, headers=None):
 @click.argument('newsletter')
 @click.option('--env', type=click.Choice(['dev', 'stage', 'prod']), default='dev',
               help='Instance to use. Default is dev.')
-def cli(email, newsletter, env):
+@click.option('--lang', default='en')
+def cli(email, newsletter, env, lang):
     click.echo('Sending request to {0}...'.format(env))
     try:
         resp = request(env, 'subscribe', {
             'newsletters': newsletter,
             'email': email,
+            'lang': lang,
         })
     except basket.BasketException as e:
         click.secho('ERROR {0.code}: {0.desc}'.format(e), fg='red', bold=True)
